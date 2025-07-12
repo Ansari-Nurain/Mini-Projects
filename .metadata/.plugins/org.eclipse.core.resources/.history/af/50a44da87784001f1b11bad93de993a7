@@ -1,0 +1,5 @@
+package com.course_api.entities;
+
+public class Course {
+
+}

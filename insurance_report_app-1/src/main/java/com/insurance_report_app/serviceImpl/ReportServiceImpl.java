@@ -1,0 +1,88 @@
+package com.insurance_report_app.serviceImpl;
+
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
+
+import com.insurance_report_app.dto.SearchRequestDTO;
+import com.insurance_report_app.entity.CitizenPlan;
+import com.insurance_report_app.repository.CitizenPlanRepo;
+import com.insurance_report_app.service.ReportService;
+
+@Service
+public class ReportServiceImpl implements ReportService {
+	
+	@Autowired
+	CitizenPlanRepo citizenPlanRepo;
+
+	@Override
+	public List<String> getPlanName() {
+
+//		List<String> planName = citizenPlanRepo.getPlanName();
+//		return planName;
+		
+		return citizenPlanRepo.getPlanName();
+	}
+
+	@Override
+	public List<String> getPlanStatus() {
+		
+		return citizenPlanRepo.getPlanStatus();
+	}
+
+	@Override
+	public List<CitizenPlan> search(SearchRequestDTO requestDTO) {
+		
+//		return citizenPlanRepo.findAll();
+		
+		
+//		CitizenPlan citizenPlan = new CitizenPlan();
+//		BeanUtils.copyProperties(requestDTO, citizenPlan);
+//		return citizenPlanRepo.findAll(Example.of(citizenPlan));
+		
+		CitizenPlan citizenPlan = new CitizenPlan();		
+		if(null != requestDTO.getPlanName() && !"".equals(requestDTO.getPlanName())) {
+			citizenPlan.setPlanName(requestDTO.getPlanName());
+		}
+		if(null != requestDTO.getPlanStatus() && !"".equals(requestDTO.getPlanStatus())) {
+			citizenPlan.setPlanStatus(requestDTO.getPlanStatus());
+		}
+		if(null != requestDTO.getGender() && !"".equals(requestDTO.getGender())) {
+			citizenPlan.setGender(requestDTO.getGender());
+		}
+		
+		return citizenPlanRepo.findAll(Example.of(citizenPlan));
+	}
+		
+		
+		
+//		
+//		 if (requestDTO.getPlanName() != null && !requestDTO.getPlanName().isEmpty()) {
+//		        citizenPlan.setPlanName(requestDTO.getPlanName());
+//		    }
+//		    if (requestDTO.getPlanStatus() != null && !requestDTO.getPlanStatus().isEmpty()) {
+//		        citizenPlan.setPlanStatus(requestDTO.getPlanStatus());
+//		    }
+//		    if (requestDTO.getGender() != null && !requestDTO.getGender().isEmpty()) {
+//		        citizenPlan.setGender(requestDTO.getGender());
+//		    }
+//		
+//		return citizenPlanRepo.findAll(Example.of(citizenPlan));
+//	}
+
+	@Override
+	public boolean exportExcel() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean exportPdf() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

@@ -1,0 +1,9 @@
+1716288426214	Delete element
+1716290229298	Rename type 'ReportService'
+1716290250551	Rename type 'ReportServiceImpl'
+1716290271459	Rename type 'ReportController'
+1716291664215	Delete element
+1716294081013	Rename type 'CitizenReportServiceImpl'
+1716294096829	Rename type 'CitizenReportService'
+1716294139486	Rename type 'CitizenReportController'
+1716448376370	Extract method 'init'

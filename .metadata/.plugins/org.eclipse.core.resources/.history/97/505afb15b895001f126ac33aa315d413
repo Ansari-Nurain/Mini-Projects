@@ -1,0 +1,24 @@
+package com.employee_menegament.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.employee_menegament.entities.Employee;
+import com.employee_menegament.service.EmployyeService;
+
+@RestController
+@RequestMapping("api/employee")
+public class EmployeeController {
+	
+	@Autowired
+	private EmployyeService employyeService;
+	
+	@RequestMapping
+	public Employee addEmployee(@RequestBody Employee employee) {
+		
+		return employyeService.addEmployee(employee);
+	}
+
+}

@@ -1,0 +1,12 @@
+package com.course_api.service;
+
+import java.util.List;
+
+import com.course_api.entities.Course;
+
+public interface CourseService {
+	
+	public List<Course> getCourses();
+	public Course getCourse(long courseId);
+
+}

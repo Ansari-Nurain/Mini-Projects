@@ -1,0 +1,214 @@
+package com.school_management_system.services;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.school_management_system.dto.StudentDTO;
+import com.school_management_system.entities.Student;
+import com.school_management_system.repositories.StudentRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
+@Service
+public class StudentServiceImpl implements StudentService{
+	
+	@Autowired
+	private StudentRepository studentRepo;
+	
+	
+	@Override
+	public StudentDTO addStudent(StudentDTO studentDTO) {
+		
+		Student dtoToStudent = this.dtoToStudent(studentDTO);
+		
+		Student studentSaved = studentRepo.save(dtoToStudent);
+				
+		return this.studentToDto(studentSaved);
+
+	}
+	
+	public Student dtoToStudent(StudentDTO studentDTO) {
+		
+		Student student = new Student();
+		student.setStudentId(studentDTO.getStudentId());
+		student.setFirstName(studentDTO.getFirstName());
+		student.setLastName(studentDTO.getLastName());
+		student.setEmail(studentDTO.getEmail());;
+		student.setGender(studentDTO.getGender());
+		student.setPhoneNumber(studentDTO.getPhoneNumber());
+		student.setCourses(studentDTO.getCourses());
+		
+		return student;
+	}
+	
+	public StudentDTO studentToDto(Student student) {
+		
+		StudentDTO studentDTO = new StudentDTO();
+		studentDTO.setStudentId(student.getStudentId());
+		studentDTO.setFirstName(student.getFirstName());
+		studentDTO.setLastName(student.getLastName());
+		studentDTO.setEmail(student.getEmail());;
+		studentDTO.setGender(student.getGender());
+		studentDTO.setPhoneNumber(student.getPhoneNumber());
+		studentDTO.setCourses(student.getCourses());
+		
+		return studentDTO;
+	}
+	
+	
+	
+//	@Override
+//	public StudentDTO addStudent(StudentDTO studentDTO) {		
+//		
+//		Student student = new Student();
+//		student.setStudentId(studentDTO.getStudentId());
+//		student.setFirstName(studentDTO.getFirstName());
+//		student.setLastName(studentDTO.getLastName());
+//		student.setEmail(studentDTO.getEmail());
+//		student.setPhoneNumber(studentDTO.getPhoneNumber());
+//		student.setGender(studentDTO.getGender());
+//		
+//		student.setCourses(studentDTO.getCourses());
+//		
+//		Student save = studentRepo.save(student);
+//		
+//		studentDTO.setStudentId(save.getStudentId());
+//		studentDTO.setFirstName(save.getFirstName());
+//		studentDTO.setLastName(save.getLastName());
+//		studentDTO.setEmail(save.getEmail());
+//		studentDTO.setPhoneNumber(save.getPhoneNumber());
+//		studentDTO.setGender(save.getGender());
+//		studentDTO.setCourses(save.getCourses());
+//				
+//		return studentDTO;
+//
+//	}
+	
+	
+//	@Override
+//	public StudentDTO addStudent(StudentDTO studentDTO) {		
+//		
+//		Student student = new Student();
+//		student.setStudentId(studentDTO.getStudentId());
+//		student.setFirstName(studentDTO.getFirstName());
+//		student.setLastName(studentDTO.getLastName());
+//		student.setEmail(studentDTO.getEmail());
+//		student.setPhoneNumber(studentDTO.getPhoneNumber());
+//		student.setGender(studentDTO.getGender());
+//		
+//
+//		List<Course> courses = studentDTO.getCourses().stream().map(courseDTO->{
+//		
+//			Course course = new Course();
+//			course.setCourseId(courseDTO.getCourseId());
+//			course.setTitle(courseDTO.getTitle());
+//			course.setDescription(courseDTO.getDescription());
+//			course.setStudent(student);
+//			return course;
+//		}).collect(Collectors.toList());
+//			
+//		
+//		student.setCourses(studentDTO.getCourses());
+//		
+//		Student save = studentRepo.save(student);
+//		
+//		studentDTO.setStudentId(save.getStudentId());
+//		studentDTO.setFirstName(save.getFirstName());
+//		studentDTO.setLastName(save.getLastName());
+//		studentDTO.setEmail(save.getEmail());
+//		studentDTO.setPhoneNumber(save.getPhoneNumber());
+//		studentDTO.setGender(save.getGender());
+//		
+//		List<CourseDTO> courseDTOs = save.getCourses().stream().map(course->{
+//			
+//			CourseDTO courseDTO2 = new CourseDTO();
+//			courseDTO2.setCourseId(course.getCourseId());
+//			courseDTO2.setTitle(course.getTitle());
+//			courseDTO2.setDescription(course.getDescription());
+//			return courseDTO2;
+//		}).collect(Collectors.toList());
+//		
+//		studentDTO.setCourses(save.getCourses());
+//				
+//		return studentDTO;
+//
+//	}
+	
+	
+//	@Override
+//	public Student addStudent(Student student) {
+//
+//		return studentRepo.save(student);
+//	}
+
+	@Override
+	public List<StudentDTO> getAllStudent() {
+
+		List<Student> students = studentRepo.findAll();
+	    List<StudentDTO> studentDto = students.stream().map(student-> this.studentToDto(student)).collect(Collectors.toList());
+		
+		return studentDto;
+	}
+
+	@Override
+	public StudentDTO getStudentById(long studentId) {
+
+		Student student = studentRepo.findById(studentId).orElse(null);
+		if(student==null) {
+			throw new EntityNotFoundException("Student Not Found with "+studentId);
+		}
+		
+		return studentToDto(student);
+	}
+
+	@Override
+	public StudentDTO updateStudent(long studentId, StudentDTO studentDTO) {
+
+		Student student = studentRepo.findById(studentId).orElse(null);
+		
+		if(student.getStudentId()==studentId) {
+			student.setStudentId(studentDTO.getStudentId());
+			student.setFirstName(studentDTO.getFirstName());
+			student.setLastName(studentDTO.getLastName());
+			student.setEmail(studentDTO.getEmail());
+			student.setPhoneNumber(studentDTO.getPhoneNumber());
+			student.setGender(studentDTO.getGender());
+			
+			Student student2 = studentRepo.save(student);
+			
+			StudentDTO studentToDto = this.studentToDto(student2);
+			
+		}else {
+			throw new EntityNotFoundException("Student not found with "+studentId);
+		}
+		
+		return studentToDto;
+	}
+
+	@Override
+	public String deleteStudent(long studentId) {
+
+		studentRepo.deleteById(studentId);
+		
+		return "Deleted";
+	}
+
+
+
+//	@Override
+//	public Student findStudentByFirstName(String firstName) {
+//
+//		return studentRepo.findStudentByFirstName(firstName);
+//	}
+//
+//	@Override
+//	public List<Student> findStudentByCourseId(long courseId) {
+//
+//		return studentRepo.findStudentByCourse_CourseId(courseId);
+//	}
+
+}

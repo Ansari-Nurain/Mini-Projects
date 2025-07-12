@@ -1,0 +1,9 @@
+package com.springBootDemo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.springBootDemo.entity.User;
+
+public interface Repositery extends JpaRepository<User, Integer> {
+
+}

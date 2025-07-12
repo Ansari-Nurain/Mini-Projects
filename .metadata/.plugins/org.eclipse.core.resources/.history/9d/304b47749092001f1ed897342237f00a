@@ -1,0 +1,27 @@
+package com.one_to_many_mapping.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.one_to_many_mapping.entities.Course;
+import com.one_to_many_mapping.entities.Student;
+import com.one_to_many_mapping.repositories.StudentRepository;
+
+@Service
+public class StudentServiceImpl implements StudentService{
+	
+	@Autowired
+	private StudentRepository studentRepo;
+
+	@Override
+	public Student addStudent(Student student) {
+		
+		for(Course course : student.getCourses()) {
+			
+			
+		}
+		
+		return studentRepo.save(student);
+	}
+
+}

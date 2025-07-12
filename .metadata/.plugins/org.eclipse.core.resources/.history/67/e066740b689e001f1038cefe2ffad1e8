@@ -1,0 +1,127 @@
+package com.school_management_system.services;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.school_management_system.dto.CourseDTO;
+import com.school_management_system.dto.StudentDTO;
+import com.school_management_system.entities.Course;
+import com.school_management_system.entities.Student;
+import com.school_management_system.entities.Teacher;
+import com.school_management_system.repositories.CourseRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
+@Service
+public class CourseSeviceImpl implements CourseService {
+
+	@Autowired
+	private CourseRepository courseRepo;
+
+	@Autowired
+	private StudentService  studentService;
+
+	@Autowired
+	private TeacherService teacherService;
+
+	@Override
+	public CourseDTO addCourse(CourseDTO courseDTO) {
+
+		Student studentById = studentService.getStudentById(courseDTO.getStudentId());
+
+		Teacher teacherById = teacherService.getTeacherById(courseDTO.getTeacherId());
+
+		Course course = new Course();
+		course.setTitle(courseDTO.getTitle());
+		course.setDescription(courseDTO.getDescription());
+		course.setStudent(studentById);
+		course.setTeacher(teacherById);
+
+		Course save = courseRepo.save(course);
+
+		courseDTO.setCourseId(save.getCourseId());
+		courseDTO.setStudentId(studentById.getStudentId());
+		
+		return courseDTO;
+	}
+	
+
+
+	@Override
+	public List<Course> getAllCourse() {
+
+		return courseRepo.findAll();
+	}
+
+	@Override
+	public Course getCourseById(long courseId) {
+
+		Course course = courseRepo.findById(courseId).orElse(null);
+		if (course == null) {
+			throw new EntityNotFoundException("Course not found with " + courseId);
+		}
+
+		return course;
+	}
+
+	@Override
+	public Course updateCourse(long courseId, Course course) {
+
+		Course orElse = courseRepo.findById(courseId).orElse(null);
+		if (orElse.getCourseId() == courseId) {
+			orElse.setCourseId(course.getCourseId());
+			orElse.setTitle(course.getTitle());
+			orElse.setDescription(course.getDescription());
+		} else {
+			throw new EntityNotFoundException("Course not found with " + courseId);
+		}
+
+		return courseRepo.save(course);
+	}
+
+	@Override
+	public String deleteCourse(long courseId) {
+
+		courseRepo.deleteById(courseId);
+
+		return "Deleted";
+	}
+
+	@Override
+	public List<Course> getCourseByStudentId(long studentId) {
+
+		 return courseRepo.findCourseByStudent_StudentId(studentId);
+	}
+
+	@Override
+	public List<Course> getCourseByTeacherId(long teacherId) {
+
+		 return courseRepo.findCourseByTeacher_TeacherId(teacherId);
+	}
+
+
+
+	@Override
+	public List<Course> getCourseByTitle(String title) {
+
+		return courseRepo.findCourseByTitle(title);
+	}
+
+
+
+	@Override
+	public List<Course> getCourseByStudentFirstName(String firstName) {
+
+		return courseRepo.findCourseByStudentFirstName(firstName);
+	}
+
+
+
+	@Override
+	public List<Student> getStudentByTitle(String courseTitle) {
+
+		return courseRepo.findStudentByTitle(courseTitle);
+	}
+
+}

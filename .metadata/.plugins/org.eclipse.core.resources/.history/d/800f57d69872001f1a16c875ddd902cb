@@ -1,0 +1,49 @@
+package com.springBootDemo;
+
+import java.util.List;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import com.springBootDemo.entity.User;
+
+@SpringBootApplication
+public class SpringBootDemoApplication {
+
+	public static void main(String[] args) {
+		ApplicationContext context = SpringApplication.run(SpringBootDemoApplication.class, args);
+		
+		Repositery repositery = context.getBean(Repositery.class);
+		
+//		User user = new User();
+//		user.setName("Nurain");
+//		user.setCity("Siwan");
+//		user.setStates("This is the first spring boot project");
+//		
+//		User save = repositery.save(user);
+//		System.out.println(save);
+		
+		User user = new User();
+		user.setName("Nurain");
+		user.setCity("Siwan");
+		user.setStates("This is the first spring boot project");
+		
+		User user1 = new User();
+		user.setName("Nurain");
+		user.setCity("Siwan");
+		user.setStates("This is the first spring boot project");
+		
+		User user2 = new User();
+		user.setName("Nurain");
+		user.setCity("Siwan");
+		user.setStates("This is the first spring boot project");
+				
+		List<User> results = List.of(user,user1,user2);
+		List<User> saveAll = repositery.saveAll(results);
+		
+		saveAll.forEach(users ->{
+			System.out.println(users);
+		});
+	}
+
+}

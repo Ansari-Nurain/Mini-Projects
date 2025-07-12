@@ -1,0 +1,54 @@
+package com.blog_app_apis.userserviceimpl;
+
+import java.util.List;
+import java.util.Locale.Category;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.blog_app_apis.payloads.CategoryDTO;
+import com.blog_app_apis.repositries.CategoryRepository;
+import com.blog_app_apis.services.CategoryService;
+
+public class CategoryServiceImpl implements CategoryService {
+	
+	@Autowired
+	private CategoryRepository categoryRepo;
+	
+	@Autowired
+	private ModelMapper mapper;
+
+	@Override
+	public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+
+		Category cat = this.mapper.map(categoryDTO, Category.class);
+		this.categoryRepo.save(cat);
+		
+		return null;
+	}
+
+	@Override
+	public CategoryDTO updateCategory(CategoryDTO categoryDTO, Integer categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteCategory(Integer categoryId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public CategoryDTO getCategoryById(Integer categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<CategoryDTO> getAllCategory() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
